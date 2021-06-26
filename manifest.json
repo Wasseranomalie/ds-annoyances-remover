@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "derStandard Annoyances Remover",
+  "version": "1.0",
+  "description": "Blockiert Popups, entfernt ausgewählte Stimmen aus dem Forum und umgeht Deaktivierung der Sichtbarkeit von Forenpostings (in Addon-Einstellung deaktivierbar)",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.derstandard.at/*"
+      ],
+      "js": [
+        "dsfixer.js"
+      ]
+    }
+  ],
+  "options_ui": {
+    "page": "settings/settings.html"
+  },
+  "permissions": [
+    "storage"
+  ]
+}
