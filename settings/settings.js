@@ -1,4 +1,4 @@
-let settings = ['block-popups', 'rating-disable', 'selected-voices'];
+let settings = ['block-popups', 'rating-disable', 'selected-voices', 'next-video'];
 
 async function saveOptions(e) {
     e.preventDefault();

@@ -1,4 +1,4 @@
-let settings = ['block-popups', 'rating-disable', 'selected-voices'];
+let settings = ['block-popups', 'rating-disable', 'selected-voices', 'next-video'];
 
 showRatings = function () {
     let ratings = document.querySelectorAll(".js-ratings, .ratings");
@@ -21,6 +21,27 @@ removeVoices = function () {
     return introRemoved && postingsRemoved;
 }
 
+stopNextVideoAutoplay = function () {
+    if (document.getElementById('playerv5_box') === null) {
+        return;
+    }
+    let svgElements = document.body.querySelectorAll('.np_icon ');
+    if (svgElements.length > 0) {
+        for (let svgElement of svgElements) {
+            if (svgElement.childElementCount === 1) {
+                let useElements = svgElement.getElementsByTagName('use');
+                if (useElements.length === 1) {
+                    let useElement = useElements.item(0);
+                    if (useElement.getAttributeNS('http://www.w3.org/1999/xlink', 'href') === '#dmp_Cross') {
+                        useElement.parentElement.parentElement.click();
+                        console.log('Aborted countdown for subsequent video playback.');
+                    }
+                }
+            }
+        }
+    }
+}
+
 createChangeObserver = function (executeFunctions) {
 
     let observer = new MutationObserver(() => {
@@ -38,7 +59,6 @@ createChangeObserver = function (executeFunctions) {
 
 removeElementWithClassName = function (className) {
     const elements = document.getElementsByClassName(className);
-    console.log('elements: ' + elements.length)
     if (elements.length > 0) {
         const element = elements[0];
         element.parentElement.removeChild(element);
@@ -72,21 +92,25 @@ retrieveSettings().then(() => {
     if (settingsDict[settings[2]]) {
         functionsForObserver.push(removeVoices);
     }
+    if (settingsDict[settings[3]]) {
+        functionsForObserver.push(stopNextVideoAutoplay);
+    }
 
     createChangeObserver(functionsForObserver);
 
     if (settingsDict[settings[0]]) {
-        console.log('Blocking popups');
         removePopupContainer();
     }
 
     if (settingsDict[settings[1]]) {
-        console.log('Showing ratings');
         showRatings();
     }
 
     if (settingsDict[settings[2]]) {
-        console.log('Removing selected voices');
         removeVoices();
+    }
+
+    if (settingsDict[settings[3]]) {
+        stopNextVideoAutoplay();
     }
 })
